@@ -1,0 +1,13 @@
+This is a jQuery API browser 
+-build entirely from jQuery raw API dump in XML format.
+-XSLT transformation is done to show APIs in a presentable html format.
+-javascript is used to do some searching menu functions and preview demo, edit demo options.
+-One can run the existing demo supplied by jquery along with their API. But there is option to edit the demo code and run
+locally in an iframe.
+-This viewer is better than API browser provided by jQuery in terms of loading time. Because it gets locaded only once.
+-Another advantage is that, this will show snapshot of the APIs based on some tags in menu. 
+-In addition to these since the whole XML is loaded at once, one can simple use some text searching tool of browser to
+find the requied item.
+
+
+Please let me know if anyone wants more features.  

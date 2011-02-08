@@ -1,0 +1,326 @@
+<?xml version="1.0"  encoding="ISO-8859-1"?>
+ 
+<xsl:transform
+	version="1.0"
+	xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+
+	<xsl:output
+		omit-xml-declaration="yes"
+		method="html"
+		version="1.0"
+		encoding="ISO-8859-1"
+		doctype-public="-//W3C//DTD Xhtml 1.0 Transitional//EN"
+		doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"
+		indent="yes"
+		media-type="text/html"
+		/>
+<!--xsl:output method="html" version="4.01" encoding="utf-8" standalone="no" indent="yes"
+media-type="text/html"/-->
+
+	<!-- Match the root-level node. -->
+	<xsl:template match="/">
+
+		<html>
+		<head>
+			<title>jQuery Documentation</title>
+			<link type="text/css" href="file:///C:/Users/Samarjit/Desktop/APIBrowser.css" rel="stylesheet" />
+		</head>
+		<body>
+
+			<h1>
+				jQuery 1.4 Documentation
+			</h1>
+
+			<!--
+				Apply templates to direct descendents of the
+				root node (should be the CAT nodes).
+			-->
+			 
+			<xsl:apply-templates />
+			 
+		</body>
+		</html>
+
+	</xsl:template>
+	<xsl:template match="categories">
+		<div class="menuhead">
+		<xsl:apply-templates select="category"/>
+		</div>
+	</xsl:template>
+	<xsl:template match="category">
+
+		<span class="menu">
+			<!--
+				Check to see if this category is a
+				sub-category. If so, we have to add the
+				conditional class attribute.
+			-->
+			<xsl:if test="../../category">
+				<xsl:attribute name="class">
+					<xsl:text>sub</xsl:text>
+				</xsl:attribute>
+			</xsl:if>
+
+			<xsl:value-of select="@name" /><br/>
+		</span>
+
+		<!--
+			Apply templates to all direct descendents of the
+			current category node.
+		-->
+		<xsl:apply-templates />
+
+	</xsl:template>
+
+
+	<xsl:template match="method">
+
+		<h3>
+			<xsl:value-of select="@name" />
+
+			<!-- Output the named params. -->
+			<span class="params">
+				<xsl:text>( </xsl:text>
+				<xsl:for-each select="params">
+
+					<xsl:value-of select="@name" />
+					<xsl:if test="position() != last()">
+						<xsl:text>, </xsl:text>
+					</xsl:if>
+
+				</xsl:for-each>
+				<xsl:text> )</xsl:text>
+			</span>
+		</h3>
+
+		<div class="methodbody">
+
+			<xsl:apply-templates select="desc" />
+
+			<xsl:if test="params">
+
+				<h4>
+					<xsl:text>Parameterss</xsl:text>
+				</h4>
+
+				<xsl:apply-templates select="params" />
+
+			</xsl:if>
+
+			<xsl:if test="options">
+
+				<h4>
+					<xsl:text>Hash Options</xsl:text>
+				</h4>
+
+				<xsl:apply-templates select="options" />
+
+			</xsl:if>
+
+			<xsl:if test="@type">
+
+				<h4>
+					<xsl:text>Returns</xsl:text>
+				</h4>
+
+				<p>
+					<xsl:value-of select="@type" />
+				</p>
+
+			</xsl:if>
+
+			<xsl:apply-templates select="examples" />
+
+			<xsl:if test="see">
+
+				<h4>
+					<xsl:text>See Also</xsl:text>
+				</h4>
+
+				<p>
+					<xsl:for-each select="see">
+						<xsl:value-of select="." />
+						<br />
+					</xsl:for-each>
+				</p>
+
+			</xsl:if>
+
+		</div>
+
+	</xsl:template>
+
+
+	<!--
+		This template will match params or options
+		which are formatted in the same way.
+	-->
+	<xsl:template match="params|options">
+
+		<p>
+			<xsl:if test="@name != ''">
+				<strong>
+					<xsl:value-of select="@name" />
+				</strong>
+				<xsl:text>: </xsl:text>
+			</xsl:if>
+
+			<xsl:if test="@type != ''">
+				<em>
+					<xsl:value-of select="@type" />
+				</em>
+				<xsl:text>: </xsl:text>
+			</xsl:if>
+
+			<xsl:value-of select="." />
+		</p>
+
+	</xsl:template>
+	
+	<xsl:template match="entry">
+		<p> <xsl:text> | </xsl:text> </p>
+		<p> <xsl:text>  </xsl:text> </p>
+		<div class="entry" >
+			<div class="entrybanner">
+			<h2>
+			<xsl:if test="@type = 'selector'">
+				<xsl:text>:</xsl:text>
+			</xsl:if>
+			 <xsl:value-of select="@name" />
+			<xsl:if test="signature/argument">	
+			(
+				<xsl:for-each select="signature/argument">
+					<xsl:value-of select="@name" /> 
+					<xsl:if test="position() != last()">
+						<xsl:text>, </xsl:text>
+					</xsl:if>
+				</xsl:for-each>
+			)
+			</xsl:if>
+			
+			</h2>
+			Type: <xsl:value-of select="@type" />
+			<div style="float:right" >Returns: <xsl:value-of select="@return" /> </div>
+				<xsl:if test="sample">	
+					Sample: <xsl:value-of select="sample" />
+				</xsl:if>
+			</div>
+			 <xsl:apply-templates />
+		</div><!--  end of description -->
+		 <xsl:apply-templates select="entry/category" />
+		  
+	</xsl:template>
+	<xsl:template match="entry/category">
+		
+		
+		  <xsl:variable name="myurl">
+				 <xsl:value-of select="../@name" />/<xsl:value-of select="@name"     />
+		  </xsl:variable>
+		
+		<span class="linkup">
+			 
+			 
+			 <a  > 
+			 
+			    <xsl:attribute name="href" >
+			      <xsl:value-of select="$myurl" />
+			    </xsl:attribute> 
+			    <xsl:value-of select="@name"     />
+			 </a>
+		</span>
+		
+		 	
+		<xsl:text> </xsl:text><!--  end of description -->
+		
+	</xsl:template>
+	<xsl:template match="signature">
+		<div class="signature">
+		Arguments:<div class="version" style="float:right">Added: <xsl:value-of select="added"     /></div><br/>	
+		        <xsl:for-each select="argument">
+
+					(<b><xsl:value-of select="@name" />: </b>
+					<xsl:value-of select="@type" /><xsl:text/>) 
+					<i style="font-size:.8em;">Optional: <xsl:value-of select="@optional" /><xsl:text/></i>
+					- <xsl:value-of select="desc" /> 
+						<xsl:text></xsl:text>
+					  	 
+					<br/>
+				</xsl:for-each>	
+		</div> 
+
+	</xsl:template>
+		
+	<xsl:template match="desc">
+
+		<p class="description">
+			<xsl:value-of select="."     />
+		</p><!--  end of description -->
+
+	</xsl:template>
+	<xsl:template match="longdesc">
+
+		<p class="longdescription">
+			<xsl:value-of select="."     />
+		</p><!--  end of description -->
+
+	</xsl:template>	
+	
+	<xsl:template match="example">
+
+		<h4>
+			<xsl:text>Example</xsl:text>
+		</h4>
+
+		<xsl:if test="desc">
+			<p>
+				<xsl:value-of select="desc" />
+			</p>
+		</xsl:if>
+
+		<xsl:if test="code">
+			<pre>
+				<xsl:value-of select="code" />
+			</pre>
+		</xsl:if>
+
+		<xsl:if test="before">
+			<h5>
+				<xsl:text>Before</xsl:text>
+			</h5>
+
+			<p>
+				<xsl:value-of select="before" />
+			</p>
+		</xsl:if>
+
+		<xsl:if test="results">
+			<h5>
+				<xsl:text>Result</xsl:text>
+			</h5>
+
+			<pre>
+				<xsl:value-of select="results" />
+			</pre>
+		</xsl:if>
+		
+		<xsl:if test="code">
+			<h5>
+				<xsl:text>Code</xsl:text>
+			</h5>
+
+			<pre>
+				<xsl:value-of select="code" />
+			</pre>
+		</xsl:if>
+		<xsl:if test="code">
+			<h5>
+				<xsl:text>HTML</xsl:text>
+			</h5>
+
+			<pre>
+				<xsl:value-of select="html" />
+			</pre>
+		</xsl:if>	
+	</xsl:template>
+
+</xsl:transform>
