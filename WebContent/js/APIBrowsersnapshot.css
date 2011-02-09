@@ -6,7 +6,7 @@ body {
     margin: 0; 
      
     position: relative;
-    color: #BFBEBE;
+    color: #FFFFFF;
     cursor: default;
 }
 
@@ -532,6 +532,7 @@ border: 1px solid #606060;
 width: 400px;
 height: 100px;
 float: left;
+color: #BFBEBE;
 }
 .snapshotfloat div a b{
 color:  #EDEDED;
@@ -554,3 +555,9 @@ position: fixed;
 bottom: 0px;
 left: 0px;
 }
+
+.filterpanel{
+position: fixed;
+top: 0px;
+right: 0px;	
+	}
