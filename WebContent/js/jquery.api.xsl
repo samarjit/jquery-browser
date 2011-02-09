@@ -23,6 +23,7 @@ media-type="text/html"/-->
 		<html>
 		<head>
 			<title>jQuery Documentation</title>
+			<link REL="SHORTCUT ICON" HREF="jqapi.ico" />
 			<link type="text/css" href="APIBrowser.css" rel="stylesheet" />
 			<script type="text/javascript" src="http://code.jquery.com/jquery-1.4.4.min.js"  ></script>
 			<script language="javascript">
@@ -311,6 +312,12 @@ media-type="text/html"/-->
 			<a > <!-- <a name="jQuery.trim"/> for TOC link-->
 			  <xsl:attribute name="name">
 			  	<xsl:value-of select="@name" />
+			  	<xsl:for-each select="signature/argument">
+					<xsl:value-of select="@name" /> 
+					<xsl:if test="position() != last()">
+						<xsl:text></xsl:text>
+					</xsl:if>
+				</xsl:for-each>
 			  </xsl:attribute>
 			</a>
 			 
@@ -355,9 +362,10 @@ media-type="text/html"/-->
 		<span class="linkup">
 			 
 			 <a  > 
-			    <xsl:attribute name="href" >
-			      <xsl:value-of select="$myurl" />
-			    </xsl:attribute> 
+			     
+			    <xsl:attribute name="onclick" >
+			      $('#filter').val('<xsl:value-of select="@name" />')
+			    </xsl:attribute>
 			  <xsl:value-of select="@name"     /></a>
 		</span><xsl:text> </xsl:text><!--  end of description -->
 		
@@ -561,8 +569,25 @@ media-type="text/html"/-->
 					<a>
 					    <xsl:attribute name="href">
 							#<xsl:value-of select="@name" />
+							<xsl:for-each select="signature/argument">
+									<xsl:value-of select="@name" /> 
+									<xsl:if test="position() != last()">
+										<xsl:text></xsl:text>
+									</xsl:if>
+								</xsl:for-each>
 					    </xsl:attribute>
-						<b><xsl:value-of select="@name" /></b>
+						<b><xsl:value-of select="@name" />
+							<xsl:if test="signature/argument">	
+							(
+								<xsl:for-each select="signature/argument">
+									<xsl:value-of select="@name" /> 
+									<xsl:if test="position() != last()">
+										<xsl:text>, </xsl:text>
+									</xsl:if>
+								</xsl:for-each>
+							)
+							</xsl:if>
+						</b>
 					</a>
 					<xsl:for-each select="category">
 							  <xsl:variable name="addr">
