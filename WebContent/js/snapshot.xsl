@@ -24,7 +24,7 @@ media-type="text/html"/-->
 			<title>jQuery Documentation</title>
 			<link REL="SHORTCUT ICON" HREF="jqapi.ico" />
 			<link type="text/css" href="APIBrowsersnapshot.css" rel="stylesheet" />
-			<script type="text/javascript" src="http://code.jquery.com/jquery-1.4.4.min.js"  ></script>
+			<script type="text/javascript" src="http://code.jquery.com/jquery-1.5.min.js"  ></script>
 			<script language="javascript">
 			<![CDATA[
 			function filterSnapshot(query){
@@ -105,11 +105,12 @@ media-type="text/html"/-->
 
 	</xsl:template>
 	<xsl:template name="snapshot">
-		 <div class="filterpanel"><input id="filter" />
-			   <button type="button"
+		 <div class="filterpanel">
+			  <form><input type="text" id="filter" /> <button type="button" 
 			     onclick="filterSnapshot($('#filter').val())">Go</button>
 			   <button type="button"
 			     onclick="removeFilter()">Clear</button>
+			     </form>
 		</div>
 		<div class="snapshotfloat">
 		      
